@@ -32,19 +32,35 @@ A comprehensive personal budget tracking web app with AI-powered chat assistant,
 - All data stored locally in your browser
 - No account required, works offline
 
-## 🚀 Setup
+## 🚀 Setup & Deployment
 
+### Local Development
 1. Open `budget-ai.html` in a modern web browser (Chrome/Edge recommended for speech features)
-2. **First-time setup**: The AI will guide you through an interactive setup process asking about:
-   - Your income sources and hours worked
-   - Housing situation (rent/mortgage)
-   - Transportation costs (car payments, insurance, gas)
-   - Utilities and subscriptions
-   - Outstanding debts and loans
-   - Savings goals
-   - Other financial context
-3. Add your Anthropic API key to the JavaScript code (replace the placeholder)
-4. Start chatting with your personalized AI budget assistant!
+2. **First-time setup**: The AI will guide you through an interactive setup process
+3. Start chatting with your personalized AI budget assistant!
+
+### Vercel Deployment (Recommended)
+1. **Fork/Clone this repository** to your GitHub account
+2. **Connect to Vercel**:
+   - Go to [vercel.com](https://vercel.com) and sign up/login
+   - Click "New Project" and import your GitHub repository
+3. **Set Environment Variable**:
+   - In your Vercel project settings, go to "Environment Variables"
+   - Add: `ANTHROPIC_API_KEY` with your Anthropic API key value
+   - Make sure it's set for "Production", "Preview", and "Development"
+4. **Deploy**:
+   - Vercel will automatically detect the configuration and deploy
+   - Your app will be available at `your-project.vercel.app`
+
+### Manual API Key Setup (Not Recommended for Production)
+If running locally without Vercel, you'll need to add your Anthropic API key directly to the serverless function. However, this exposes your key in the codebase - use Vercel environment variables instead.
+
+## 🔒 Security
+
+- **API Key Protection**: Anthropic API key is stored securely in Vercel environment variables, never exposed in client-side code
+- **Serverless Functions**: All AI API calls are proxied through Vercel's serverless functions
+- **No Client-Side Secrets**: Sensitive credentials are never sent to the browser
+- **HTTPS Only**: Vercel automatically provides SSL certificates for secure connections
 
 ## 📱 Usage
 
