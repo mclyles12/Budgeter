@@ -663,6 +663,13 @@
 </div>
 
 <script>
+console.log('Script loaded successfully');
+
+// Test basic functionality
+window.testFunction = function() {
+  console.log('Test function called');
+  alert('JavaScript is working!');
+};
 function getSystemPrompt() {
   if (!isSetupComplete) {
     return `You are helping a user set up their budget tracking for the first time. Your goal is to gather comprehensive information about their finances through natural conversation.
@@ -835,14 +842,26 @@ function renderLedger() {
 }
 
 function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', ['chat','ledger','bills','settings'][i] === tab);
-  });
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById(`panel-${tab}`).classList.add('active');
-  if (tab === 'ledger') renderLedger();
-  if (tab === 'bills') renderBills();
-  if (tab === 'settings') renderRecurringItems();
+  console.log('Switching to tab:', tab);
+  try {
+    document.querySelectorAll('.tab').forEach((t, i) => {
+      t.classList.toggle('active', ['chat','ledger','bills','settings'][i] === tab);
+    });
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById(`panel-${tab}`);
+    if (panel) {
+      panel.classList.add('active');
+      console.log('Activated panel:', `panel-${tab}`);
+    } else {
+      console.error('Panel not found:', `panel-${tab}`);
+    }
+    
+    if (tab === 'ledger') renderLedger();
+    if (tab === 'bills') renderBills();
+    if (tab === 'settings') renderRecurringItems();
+  } catch (error) {
+    console.error('Error in switchTab:', error);
+  }
 }
 
 function appendMessage(role, text) {
@@ -883,10 +902,24 @@ function autoResize(el) {
 }
 
 async function sendMessage() {
-  if (isLoading) return;
+  console.log('sendMessage called');
+  if (isLoading) {
+    console.log('Already loading, returning');
+    return;
+  }
+  
   const input = document.getElementById('chatInput');
+  if (!input) {
+    console.error('chatInput not found');
+    return;
+  }
+  
   const text = input.value.trim();
-  if (!text) return;
+  console.log('Input text:', text);
+  if (!text) {
+    console.log('No text, returning');
+    return;
+  }
 
   input.value = '';
   input.style.height = '42px';
@@ -894,17 +927,20 @@ async function sendMessage() {
 
   // Handle setup mode
   if (!isSetupComplete) {
+    console.log('Processing setup response');
     processSetupResponse(text);
     return;
   }
 
+  console.log('Sending to AI...');
   const stats = getCurrentMonthStats();
   const contextNote = `[Current month stats: spent $${stats.spent}, logged income $${stats.income}, saved $${stats.saved}. Total saved toward goal: $${getTotalSaved()}]`;
 
   chatHistory.push({ role: 'user', content: `${text}\n\n${contextNote}` });
 
   isLoading = true;
-  document.getElementById('sendBtn').disabled = true;
+  const sendBtn = document.getElementById('sendBtn');
+  if (sendBtn) sendBtn.disabled = true;
   showTyping();
 
   try {
@@ -1483,17 +1519,21 @@ function resetSetup() {
 }
 
 // Init
-initializeApp();
-updateGoalBar();
-renderLedger();
-renderRecurringItems();
+console.log('Starting initialization...');
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM loaded, initializing app...');
+  initializeApp();
+  updateGoalBar();
+  renderLedger();
+  renderRecurringItems();
+});
 
 // Debug: Reset setup with Ctrl+Shift+R
 document.addEventListener('keydown', function(e) {
   if (e.ctrlKey && e.shiftKey && e.key === 'R') {
     e.preventDefault();
+    console.log('Resetting setup...');
     resetSetup();
-    console.log('Setup reset!');
   }
 });
 </script>
