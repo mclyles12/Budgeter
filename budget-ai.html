@@ -1281,9 +1281,13 @@ function showNotification(message) {
 
 // Setup Flow Functions
 function initializeApp() {
+  console.log('Initializing app, setup complete:', isSetupComplete, 'step:', setupStep);
+  
+  // Always update the welcome message first
+  showWelcomeMessage();
+  
   if (!isSetupComplete) {
     // Start setup mode
-    showWelcomeMessage();
     if (setupStep === 0) {
       // First time - show initial setup message
       setTimeout(() => {
@@ -1298,13 +1302,15 @@ function initializeApp() {
       }, 500);
     }
   } else {
-    // Normal mode
-    showWelcomeMessage();
+    // Normal mode - just show welcome message
+    console.log('Setup complete, showing normal welcome');
   }
 }
 
 function showWelcomeMessage() {
   const welcomeBubble = document.getElementById('welcomeBubble');
+  console.log('Updating welcome message, setup complete:', isSetupComplete);
+  
   if (!isSetupComplete) {
     welcomeBubble.textContent = `Welcome! Let's set up your budget tracker. I'll ask you a few questions to understand your financial situation.`;
   } else {
@@ -1448,32 +1454,32 @@ What would you like to do first?`);
   showWelcomeMessage();
 }
 
-function generateFinancialSummary() {
-  let summary = '';
+function resetSetup() {
+  localStorage.removeItem('setupComplete');
+  localStorage.removeItem('setupStep');
+  localStorage.removeItem('userProfile');
+  localStorage.removeItem('budgetStrategy');
+  localStorage.removeItem('savingsGoal');
+  isSetupComplete = false;
+  setupStep = 0;
+  userProfile = {};
+  budgetStrategy = 'budget';
+  savingsGoal = 6000;
   
-  if (userProfile.income) {
-    summary += `💰 INCOME\n${userProfile.income}\n\n`;
-  }
+  // Clear chat and restart
+  chatHistory = [];
+  document.getElementById('chatMessages').innerHTML = `
+    <div class="msg ai" id="welcomeMessage">
+      <div class="bubble" id="welcomeBubble">Loading...</div>
+      <div class="msg-time">Now</div>
+    </div>
+  `;
   
-  if (userProfile.housing) {
-    summary += `🏠 HOUSING\n${userProfile.housing}\n\n`;
-  }
-  
-  if (userProfile.transportation) {
-    summary += `🚗 TRANSPORTATION\n${userProfile.transportation}\n`;
-  }
-  
-  if (userProfile.utilities) {
-    summary += `📄 BILLS & SUBSCRIPTIONS\n${userProfile.utilities}\n\n`;
-  }
-  
-  if (userProfile.debts) {
-    summary += `💳 DEBTS\n${userProfile.debts}\n\n`;
-  }
-  
-  summary += `🎯 SAVINGS GOAL: $${savingsGoal} by December 2025`;
-  
-  return summary;
+  initializeApp();
+  updateGoalBar();
+  renderLedger();
+  renderRecurringItems();
+  renderBills();
 }
 
 // Init
@@ -1481,6 +1487,15 @@ initializeApp();
 updateGoalBar();
 renderLedger();
 renderRecurringItems();
+
+// Debug: Reset setup with Ctrl+Shift+R
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+    e.preventDefault();
+    resetSetup();
+    console.log('Setup reset!');
+  }
+});
 </script>
 </body>
 </html>
