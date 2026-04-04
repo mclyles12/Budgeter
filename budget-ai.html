@@ -158,9 +158,12 @@
     background: var(--surface);
     border-top: 1px solid var(--border);
     padding: 12px 16px;
+    flex-shrink: 0;
+  }
+  .input-controls {
     display: flex;
     gap: 8px;
-    flex-shrink: 0;
+    align-items: flex-end;
   }
   #chatInput {
     flex: 1;
@@ -312,6 +315,251 @@
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+  /* SETTINGS PANEL */
+  .goal-setup { margin-bottom: 20px; }
+  .goal-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .goal-title {
+    font-size: 0.9rem;
+    color: var(--gold-light);
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .goal-input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .goal-prefix, .goal-suffix {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+  .goal-input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    margin: 0 8px;
+    flex: 1;
+    outline: none;
+  }
+  .goal-input:focus { border-color: var(--gold); }
+  .goal-btn {
+    background: var(--gold);
+    border: none;
+    border-radius: 6px;
+    color: var(--bg);
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 8px 16px;
+    transition: background 0.2s;
+  }
+  .goal-btn:hover { background: var(--gold-light); }
+
+  .recurring-list { margin-bottom: 12px; }
+  .recurring-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .recurring-info { flex: 1; }
+  .recurring-name { font-size: 0.8rem; color: var(--text); margin-bottom: 2px; }
+  .recurring-meta { font-size: 0.65rem; color: var(--muted); }
+  .recurring-amount { font-size: 0.85rem; font-weight: 500; }
+  .recurring-amount.expense { color: var(--red); }
+  .recurring-amount.income { color: var(--green); }
+  .recurring-actions { display: flex; gap: 6px; }
+  .recurring-edit, .recurring-delete {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: color 0.2s;
+  }
+  .recurring-edit:hover { color: var(--gold); background: rgba(200, 168, 75, 0.1); }
+  .recurring-delete:hover { color: var(--red); background: rgba(196, 95, 95, 0.1); }
+
+  .add-recurring-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--gold);
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 12px 16px;
+    width: 100%;
+    transition: all 0.2s;
+  }
+  .add-recurring-btn:hover { background: var(--card); border-color: var(--gold); }
+
+  .strategy-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .strategy-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .strategy-option:last-child { margin-bottom: 12px; }
+  .strategy-option input[type="radio"] {
+    margin-right: 8px;
+    accent-color: var(--gold);
+  }
+  .strategy-option label {
+    font-size: 0.8rem;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  /* MODAL STYLES */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(12, 11, 9, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  .modal-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 400px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .modal-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    color: var(--gold-light);
+    margin-bottom: 16px;
+  }
+  .modal-group { margin-bottom: 16px; }
+  .modal-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .modal-input {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    padding: 10px 12px;
+    outline: none;
+  }
+  .modal-input:focus { border-color: var(--gold); }
+  .modal-select {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    padding: 10px 12px;
+    outline: none;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .modal-btn {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .modal-btn.primary { background: var(--gold); color: var(--bg); }
+  .modal-btn.primary:hover { background: var(--gold-light); }
+  .modal-btn.secondary { background: var(--border); color: var(--text); }
+  .modal-btn.secondary:hover { background: var(--muted); }
+
+  /* IMAGE UPLOAD */
+  .image-preview {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    margin-top: 8px;
+    border: 1px solid var(--border);
+  }
+
+  /* SPEECH TO TEXT */
+  .voice-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--gold);
+    cursor: pointer;
+    font-size: 1rem;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .voice-btn:hover { border-color: var(--gold); background: rgba(200, 168, 75, 0.1); }
+  .voice-btn.listening {
+    background: var(--red);
+    border-color: var(--red);
+    color: white;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  @keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+  }
+</style>
 </style>
 </head>
 <body>
@@ -330,7 +578,7 @@
 <!-- GOAL BAR -->
 <div class="goal-bar">
   <div class="goal-row">
-    <span class="goal-label">Saved toward $6,000</span>
+    <span class="goal-label" id="goalLabel">Saved toward $${savingsGoal}</span>
     <span class="goal-amount" id="goalDisplay">$0 / $6,000</span>
   </div>
   <div class="progress-track">
@@ -343,6 +591,7 @@
   <div class="tab active" onclick="switchTab('chat')">💬 Chat</div>
   <div class="tab" onclick="switchTab('ledger')">📋 Ledger</div>
   <div class="tab" onclick="switchTab('bills')">🧾 Bills</div>
+  <div class="tab" onclick="switchTab('settings')">⚙️ Settings</div>
 </div>
 
 <!-- CHAT PANEL -->
@@ -365,8 +614,13 @@ What's up?</div>
     </div>
   </div>
   <div class="chat-input-area">
-    <textarea id="chatInput" placeholder="Tell me about a purchase..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-    <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+    <div class="input-controls">
+      <button class="voice-btn" id="voiceBtn" onclick="toggleVoiceInput()" title="Voice input">🎤</button>
+      <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+      <button class="voice-btn" onclick="document.getElementById('imageInput').click()" title="Upload image">📷</button>
+      <textarea id="chatInput" placeholder="Tell me about a purchase..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+    </div>
   </div>
 </div>
 
@@ -437,8 +691,50 @@ What's up?</div>
   </div>
 </div>
 
+<!-- SETTINGS PANEL -->
+<div class="panel" id="panel-settings">
+  <div class="bills-scroll">
+    <div class="section-label">🎯 Financial Goals</div>
+    <div class="goal-setup" id="goalSetup">
+      <div class="goal-card">
+        <div class="goal-title">Savings Goal</div>
+        <div class="goal-input-group">
+          <span class="goal-prefix">$</span>
+          <input type="number" id="savingsGoal" placeholder="6000" class="goal-input" value="${savingsGoal}">
+          <span class="goal-suffix">by Dec 2025</span>
+        </div>
+        <button class="goal-btn" onclick="updateSavingsGoal()">Update Goal</button>
+      </div>
+    </div>
+
+    <div class="section-label">🔄 Recurring Items</div>
+    <div class="recurring-list" id="recurringList">
+      <!-- Recurring items will be populated here -->
+    </div>
+    <button class="add-recurring-btn" onclick="showAddRecurringModal()">+ Add Recurring Item</button>
+
+    <div class="section-label">📊 Budget Strategy</div>
+    <div class="strategy-card">
+      <div class="strategy-option">
+        <input type="radio" id="strategy-budget" name="budgetStrategy" value="budget" ${budgetStrategy === 'budget' ? 'checked' : ''}>
+        <label for="strategy-budget">Stick to monthly budget</label>
+      </div>
+      <div class="strategy-option">
+        <input type="radio" id="strategy-savings" name="budgetStrategy" value="savings" ${budgetStrategy === 'savings' ? 'checked' : ''}>
+        <label for="strategy-savings">Focus on savings goal</label>
+      </div>
+      <button class="goal-btn" onclick="updateBudgetStrategy()">Update Strategy</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const SYSTEM_PROMPT = `You are a personal budget assistant AI embedded in a budget tracking app. You know everything about this user's finances:
+function getSystemPrompt() {
+  const strategy = budgetStrategy === 'savings' ? 
+    `Focus on helping the user reach their $${savingsGoal} savings goal by December 2025. Prioritize savings recommendations and warn about expenses that impact the goal.` :
+    `Help the user stick to their monthly budget. Track spending against income and provide budget-conscious advice.`;
+
+  return `You are a personal budget assistant AI embedded in a budget tracking app. You know everything about this user's finances:
 
 INCOME:
 - Job 1 (working for mom): 20hrs/week at $25/hr = ~$2,167/mo currently
@@ -463,9 +759,8 @@ OUTSTANDING DEBTS:
 - Enterprise: $500 — payment plan email sent
 - EasyPass: $157 — needs to be paid ASAP (fees growing)
 
-SAVINGS GOAL: $6,000 by December 2025 (~9 months)
-- Strategy: Ask mom to hold $100/week from pay (~$400/mo toward goal)
-- Needs ~$267/mo more from other income to hit goal
+SAVINGS GOAL: $${savingsGoal} by December 2025
+- Strategy: ${strategy}
 
 OTHER CONTEXT:
 - Lives rent-free (big advantage)
@@ -473,6 +768,9 @@ OTHER CONTEXT:
 - Applied for SNAP (not approved yet)
 - Wants to buy: Amazon cart $111, sewing machine tray $80 (possibly business expense for Depop)
 - No Xfinity anymore
+
+RECURRING ITEMS:
+${recurringItems.map(item => `- ${item.name}: $${item.amount}/${item.frequency} (${item.type})`).join('\n')}
 
 YOUR JOB:
 When user mentions a purchase, expense, income, or savings — extract the details and respond with a JSON block at the end of your message in this exact format:
@@ -483,10 +781,16 @@ Always be warm, direct, and financially savvy. Keep responses short (2-4 sentenc
 If they ask how they're doing, summarize their month from the transaction log context you'll receive.
 If they can afford something, tell them. If it'll hurt their goal, warn them.
 Never be preachy. Be like a smart friend who happens to know their finances.`;
+}
 
 let transactions = JSON.parse(localStorage.getItem('budgetTx') || '[]');
 let chatHistory = [];
 let isLoading = false;
+let recurringItems = JSON.parse(localStorage.getItem('budgetRecurring') || '[]');
+let budgetStrategy = localStorage.getItem('budgetStrategy') || 'budget';
+let savingsGoal = parseInt(localStorage.getItem('savingsGoal')) || 6000;
+let isListening = false;
+let recognition = null;
 
 function fmt(n) {
   return '$' + Math.abs(n).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -513,8 +817,9 @@ function getTotalSaved() {
 
 function updateGoalBar() {
   const saved = getTotalSaved();
-  const pct = Math.min(100, (saved / 6000) * 100);
-  document.getElementById('goalDisplay').textContent = `${fmt(saved)} / $6,000`;
+  const pct = Math.min(100, (saved / savingsGoal) * 100);
+  document.getElementById('goalDisplay').textContent = `${fmt(saved)} / $${savingsGoal}`;
+  document.getElementById('goalLabel').textContent = `Saved toward $${savingsGoal}`;
   document.getElementById('progressFill').style.width = pct + '%';
 }
 
@@ -578,11 +883,12 @@ function renderLedger() {
 
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', ['chat','ledger','bills'][i] === tab);
+    t.classList.toggle('active', ['chat','ledger','bills','settings'][i] === tab);
   });
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById(`panel-${tab}`).classList.add('active');
   if (tab === 'ledger') renderLedger();
+  if (tab === 'settings') renderRecurringItems();
 }
 
 function appendMessage(role, text) {
@@ -652,7 +958,7 @@ async function sendMessage() {
       body: JSON.stringify({
         model: 'claude-3-5-sonnet-20241022',
         max_tokens: 1000,
-        system: SYSTEM_PROMPT,
+        system: getSystemPrompt(),
         messages: chatHistory
       })
     });
@@ -691,9 +997,238 @@ async function sendMessage() {
   document.getElementById('sendBtn').disabled = false;
 }
 
+// Settings and Recurring Items Management
+function updateSavingsGoal() {
+  const input = document.getElementById('savingsGoal');
+  const newGoal = parseInt(input.value);
+  if (newGoal && newGoal > 0) {
+    savingsGoal = newGoal;
+    localStorage.setItem('savingsGoal', savingsGoal);
+    updateGoalBar();
+    input.value = '';
+    showNotification('Savings goal updated!');
+  }
+}
+
+function updateBudgetStrategy() {
+  const strategy = document.querySelector('input[name="budgetStrategy"]:checked').value;
+  budgetStrategy = strategy;
+  localStorage.setItem('budgetStrategy', strategy);
+  showNotification('Budget strategy updated!');
+}
+
+function renderRecurringItems() {
+  const container = document.getElementById('recurringList');
+  if (recurringItems.length === 0) {
+    container.innerHTML = '<div style="text-align: center; color: var(--muted); font-size: 0.8rem; padding: 20px;">No recurring items yet. Add your first one below!</div>';
+    return;
+  }
+
+  container.innerHTML = recurringItems.map((item, index) => `
+    <div class="recurring-item">
+      <div class="recurring-info">
+        <div class="recurring-name">${item.name}</div>
+        <div class="recurring-meta">${item.frequency} · ${item.category || item.type}</div>
+      </div>
+      <div class="recurring-amount ${item.type}">$${item.amount}</div>
+      <div class="recurring-actions">
+        <button class="recurring-edit" onclick="editRecurringItem(${index})">✏️</button>
+        <button class="recurring-delete" onclick="deleteRecurringItem(${index})">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showAddRecurringModal(editIndex = null) {
+  const item = editIndex !== null ? recurringItems[editIndex] : null;
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-title">${item ? 'Edit' : 'Add'} Recurring Item</div>
+      <div class="modal-group">
+        <label class="modal-label">Name</label>
+        <input type="text" class="modal-input" id="itemName" value="${item ? item.name : ''}" placeholder="e.g., Netflix subscription">
+      </div>
+      <div class="modal-group">
+        <label class="modal-label">Amount</label>
+        <input type="number" class="modal-input" id="itemAmount" value="${item ? item.amount : ''}" placeholder="50">
+      </div>
+      <div class="modal-group">
+        <label class="modal-label">Frequency</label>
+        <select class="modal-select" id="itemFrequency">
+          <option value="monthly" ${item && item.frequency === 'monthly' ? 'selected' : ''}>Monthly</option>
+          <option value="weekly" ${item && item.frequency === 'weekly' ? 'selected' : ''}>Weekly</option>
+          <option value="bi-weekly" ${item && item.frequency === 'bi-weekly' ? 'selected' : ''}>Bi-weekly</option>
+          <option value="yearly" ${item && item.frequency === 'yearly' ? 'selected' : ''}>Yearly</option>
+        </select>
+      </div>
+      <div class="modal-group">
+        <label class="modal-label">Type</label>
+        <select class="modal-select" id="itemType">
+          <option value="expense" ${item && item.type === 'expense' ? 'selected' : ''}>Expense</option>
+          <option value="income" ${item && item.type === 'income' ? 'selected' : ''}>Income</option>
+        </select>
+      </div>
+      <div class="modal-group">
+        <label class="modal-label">Category (optional)</label>
+        <input type="text" class="modal-input" id="itemCategory" value="${item ? item.category || '' : ''}" placeholder="e.g., Entertainment">
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+        <button class="modal-btn primary" onclick="${item ? `saveRecurringItem(${editIndex})` : 'saveRecurringItem()'}">${item ? 'Update' : 'Add'} Item</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function closeModal() {
+  const modal = document.querySelector('.modal');
+  if (modal) modal.remove();
+}
+
+function saveRecurringItem(editIndex = null) {
+  const name = document.getElementById('itemName').value.trim();
+  const amount = parseFloat(document.getElementById('itemAmount').value);
+  const frequency = document.getElementById('itemFrequency').value;
+  const type = document.getElementById('itemType').value;
+  const category = document.getElementById('itemCategory').value.trim();
+
+  if (!name || !amount || amount <= 0) {
+    alert('Please fill in all required fields with valid values.');
+    return;
+  }
+
+  const item = { name, amount, frequency, type, category: category || null };
+
+  if (editIndex !== null) {
+    recurringItems[editIndex] = item;
+  } else {
+    recurringItems.push(item);
+  }
+
+  localStorage.setItem('budgetRecurring', JSON.stringify(recurringItems));
+  renderRecurringItems();
+  closeModal();
+  showNotification(`Recurring item ${editIndex !== null ? 'updated' : 'added'}!`);
+}
+
+function editRecurringItem(index) {
+  showAddRecurringModal(index);
+}
+
+function deleteRecurringItem(index) {
+  if (confirm('Are you sure you want to delete this recurring item?')) {
+    recurringItems.splice(index, 1);
+    localStorage.setItem('budgetRecurring', JSON.stringify(recurringItems));
+    renderRecurringItems();
+    showNotification('Recurring item deleted!');
+  }
+}
+
+// Image Upload
+function handleImageUpload(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const imageData = e.target.result;
+      // For now, just show the image in chat. In a real app, you'd upload to a server
+      appendMessage('user', `📷 Uploaded image: <br><img src="${imageData}" class="image-preview" alt="Uploaded image">`);
+      // You could add AI analysis here: "Analyzing receipt..."
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Speech to Text
+function toggleVoiceInput() {
+  const voiceBtn = document.getElementById('voiceBtn');
+  
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('Speech recognition is not supported in this browser.');
+    return;
+  }
+
+  if (isListening) {
+    stopVoiceInput();
+  } else {
+    startVoiceInput();
+  }
+}
+
+function startVoiceInput() {
+  const voiceBtn = document.getElementById('voiceBtn');
+  
+  recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.lang = 'en-US';
+
+  recognition.onstart = function() {
+    isListening = true;
+    voiceBtn.classList.add('listening');
+    voiceBtn.textContent = '🎙️';
+  };
+
+  recognition.onresult = function(event) {
+    const transcript = event.results[0][0].transcript;
+    document.getElementById('chatInput').value = transcript;
+    autoResize(document.getElementById('chatInput'));
+  };
+
+  recognition.onend = function() {
+    stopVoiceInput();
+  };
+
+  recognition.onerror = function(event) {
+    console.error('Speech recognition error:', event.error);
+    stopVoiceInput();
+  };
+
+  recognition.start();
+}
+
+function stopVoiceInput() {
+  if (recognition) {
+    recognition.stop();
+  }
+  isListening = false;
+  const voiceBtn = document.getElementById('voiceBtn');
+  voiceBtn.classList.remove('listening');
+  voiceBtn.textContent = '🎤';
+}
+
+// Utility Functions
+function showNotification(message) {
+  // Simple notification - you could enhance this
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--gold);
+    color: var(--bg);
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    z-index: 1001;
+    animation: slideIn 0.3s ease;
+  `;
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.style.animation = 'slideOut 0.3s ease';
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
+}
+
 // Init
 updateGoalBar();
 renderLedger();
+renderRecurringItems();
 </script>
 </body>
 </html>
