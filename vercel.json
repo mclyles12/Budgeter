@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "budget-ai.html",
-      "use": "@vercel/static"
+      "src": "api/chat.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "src": "/api/chat",
+      "dest": "/api/chat.js"
     },
     {
       "src": "/(.*)",
