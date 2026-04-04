@@ -597,19 +597,8 @@
 <!-- CHAT PANEL -->
 <div class="panel active" id="panel-chat">
   <div class="chat-messages" id="chatMessages">
-    <div class="msg ai">
-      <div class="bubble">Hey! I'm your budget assistant. 👋
-
-I know your full financial situation — your bills, debts, income, and your $6,000 savings goal by December.
-
-Just talk to me naturally! You can say things like:
-• "Just spent $40 at Target"
-• "Got paid $500 today"
-• "Put $100 in savings"
-• "How am I doing this month?"
-• "Can I afford the sewing tray?"
-
-What's up?</div>
+    <div class="msg ai" id="welcomeMessage">
+      <div class="bubble" id="welcomeBubble">Loading...</div>
       <div class="msg-time">Now</div>
     </div>
   </div>
@@ -631,63 +620,8 @@ What's up?</div>
 
 <!-- BILLS PANEL -->
 <div class="panel" id="panel-bills">
-  <div class="bills-scroll">
-    <div class="section-label">Fixed Monthly Bills</div>
-    <div class="bills-list">
-      <div class="bill-row"><span class="bill-name">Car Payment 1</span><span class="bill-amt">$148</span></div>
-      <div class="bill-row"><span class="bill-name">Car Payment 2</span><span class="bill-amt">$150</span></div>
-      <div class="bill-row"><span class="bill-name">Car Insurance</span><span class="bill-amt">$200</span></div>
-      <div class="bill-row"><span class="bill-name">National Debt Relief</span><span class="bill-amt">$260</span></div>
-      <div class="bill-row"><span class="bill-name">Federal Tax Installment</span><span class="bill-amt">~$175</span></div>
-      <div class="bill-row"><span class="bill-name">Phone Bill</span><span class="bill-amt">$89</span></div>
-      <div class="bill-row"><span class="bill-name">Subscriptions</span><span class="bill-amt">$47</span></div>
-      <div class="bill-row total"><span class="bill-name">Total Fixed</span><span class="bill-amt">$1,069</span></div>
-    </div>
-
-    <div class="section-label">Outstanding Debts</div>
-    <div class="debt-row">
-      <div class="debt-name">National Debt Relief (Credit Cards)</div>
-      <div class="debt-bottom">
-        <span class="debt-status">$260/mo · in progress</span>
-        <span class="debt-amount">$7,000</span>
-      </div>
-    </div>
-    <div class="debt-row">
-      <div class="debt-name">Federal Taxes</div>
-      <div class="debt-bottom">
-        <span class="debt-status">~$175/mo installment plan active</span>
-        <span class="debt-amount">~$42,100</span>
-      </div>
-    </div>
-    <div class="debt-row">
-      <div class="debt-name">State Taxes</div>
-      <div class="debt-bottom">
-        <span class="debt-status">⏳ Waiting on callback</span>
-        <span class="debt-amount">TBD</span>
-      </div>
-    </div>
-    <div class="debt-row">
-      <div class="debt-name">Enterprise</div>
-      <div class="debt-bottom">
-        <span class="debt-status">📧 Payment plan email sent</span>
-        <span class="debt-amount">$500</span>
-      </div>
-    </div>
-    <div class="debt-row">
-      <div class="debt-name">EasyPass</div>
-      <div class="debt-bottom">
-        <span class="debt-status">⚡ Pay ASAP — fees growing!</span>
-        <span class="debt-amount">$157</span>
-      </div>
-    </div>
-
-    <div class="section-label">Income Sources</div>
-    <div class="bills-list">
-      <div class="bill-row"><span class="bill-name">Job 1 (Mom) · 20hrs/wk</span><span class="bill-amt" style="color:var(--green)">~$2,167/mo</span></div>
-      <div class="bill-row"><span class="bill-name">Job 2 (Starting soon) · 11hrs/wk</span><span class="bill-amt" style="color:var(--green)">~$933/mo</span></div>
-      <div class="bill-row"><span class="bill-name">Depop (net profit)</span><span class="bill-amt" style="color:var(--green)">~$200/mo</span></div>
-      <div class="bill-row total"><span class="bill-name">Total (soon)</span><span class="bill-amt" style="color:var(--green)">~$3,300/mo</span></div>
-    </div>
+  <div class="bills-scroll" id="billsContent">
+    <!-- Content will be populated dynamically -->
   </div>
 </div>
 
@@ -730,44 +664,47 @@ What's up?</div>
 
 <script>
 function getSystemPrompt() {
+  if (!isSetupComplete) {
+    return `You are helping a user set up their budget tracking for the first time. Your goal is to gather comprehensive information about their finances through natural conversation.
+
+Current setup step: ${setupStep + 1} of ${setupQuestions.length}
+
+You should:
+1. Ask one clear question at a time
+2. Be encouraging and patient
+3. Extract specific financial details from their responses
+4. Move to the next logical question after getting a satisfactory answer
+5. When you have enough information, summarize everything and confirm it's complete
+
+The user has already provided some information in previous steps. Use this context to ask relevant follow-up questions.
+
+When they give you information, respond positively and either:
+- Ask the next question if more info is needed
+- Summarize and confirm if setup is complete
+
+Keep responses conversational and friendly, like a helpful financial advisor getting to know their client.`;
+  }
+
+  // Regular mode with user's actual financial data
   const strategy = budgetStrategy === 'savings' ? 
-    `Focus on helping the user reach their $${savingsGoal} savings goal by December 2025. Prioritize savings recommendations and warn about expenses that impact the goal.` :
+    `Focus on helping the user reach their $${savingsGoal} savings goal. Prioritize savings recommendations and warn about expenses that impact the goal.` :
     `Help the user stick to their monthly budget. Track spending against income and provide budget-conscious advice.`;
 
   return `You are a personal budget assistant AI embedded in a budget tracking app. You know everything about this user's finances:
 
 INCOME:
-- Job 1 (working for mom): 20hrs/week at $25/hr = ~$2,167/mo currently
-- Job 2 (starting soon): 11hrs/week at $25/hr = ~$933/mo additional
-- Depop resale (net profit): ~$200/mo
-- Total soon: ~$3,300/mo
+${userProfile.income || 'To be determined during setup'}
 
-FIXED MONTHLY BILLS: $1,069/mo total
-- Car payment 1: $148
-- Car payment 2: $150
-- Car insurance: $200
-- National Debt Relief: $260 (bi-weekly $130)
-- Federal tax installment: ~$175
-- Phone bill: $89
-- Subscriptions: $47 (Microsoft $10, Spotify $7, Google One $2, Apple $3, Canva $15, Microsoft $2, Amazon Prime $8)
-- Gas: ~$160/mo variable (not in fixed total)
+FIXED MONTHLY BILLS: ${userProfile.monthlyBills || 'To be determined during setup'}
 
 OUTSTANDING DEBTS:
-- National Debt Relief (credit cards): $7,000 — paying $260/mo
-- Federal taxes: ~$42,100 — installment plan active ~$175/mo
-- State taxes: TBD — waiting on callback for installment plan
-- Enterprise: $500 — payment plan email sent
-- EasyPass: $157 — needs to be paid ASAP (fees growing)
+${userProfile.debts || 'To be determined during setup'}
 
 SAVINGS GOAL: $${savingsGoal} by December 2025
 - Strategy: ${strategy}
 
 OTHER CONTEXT:
-- Lives rent-free (big advantage)
-- BF covers groceries currently
-- Applied for SNAP (not approved yet)
-- Wants to buy: Amazon cart $111, sewing machine tray $80 (possibly business expense for Depop)
-- No Xfinity anymore
+${userProfile.otherContext || 'To be determined during setup'}
 
 RECURRING ITEMS:
 ${recurringItems.map(item => `- ${item.name}: $${item.amount}/${item.frequency} (${item.type})`).join('\n')}
@@ -791,6 +728,22 @@ let budgetStrategy = localStorage.getItem('budgetStrategy') || 'budget';
 let savingsGoal = parseInt(localStorage.getItem('savingsGoal')) || 6000;
 let isListening = false;
 let recognition = null;
+
+// Setup flow variables
+let isSetupComplete = localStorage.getItem('setupComplete') === 'true';
+let setupStep = parseInt(localStorage.getItem('setupStep')) || 0;
+let userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+let setupQuestions = [
+  "Hi! I'm your budget assistant. To give you the best help, I need to understand your financial situation. Let's start with your income. How many hours do you work per week and at what hourly rate?",
+  "Great! Now tell me about any other income sources you have (side gigs, passive income, etc.) and their monthly amounts.",
+  "Thanks! Now let's talk about your regular monthly expenses. What do you pay for housing (rent/mortgage)? If you live rent-free, just say 'none'.",
+  "Good. What about transportation costs? Do you have car payments, insurance, or regular gas expenses?",
+  "Okay. What about utilities and subscriptions? List any regular bills like phone, internet, streaming services, etc.",
+  "Now for debts and larger obligations. Do you have any credit card debt, loans, or tax payments you're making?",
+  "What's your savings goal? How much do you want to save and by when?",
+  "Finally, is there anything else important about your finances I should know? (like upcoming changes, special circumstances, etc.)"
+];
+let setupResponses = {};
 
 function fmt(n) {
   return '$' + Math.abs(n).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -888,6 +841,7 @@ function switchTab(tab) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById(`panel-${tab}`).classList.add('active');
   if (tab === 'ledger') renderLedger();
+  if (tab === 'bills') renderBills();
   if (tab === 'settings') renderRecurringItems();
 }
 
@@ -937,6 +891,12 @@ async function sendMessage() {
   input.value = '';
   input.style.height = '42px';
   appendMessage('user', text);
+
+  // Handle setup mode
+  if (!isSetupComplete) {
+    processSetupResponse(text);
+    return;
+  }
 
   const stats = getCurrentMonthStats();
   const contextNote = `[Current month stats: spent $${stats.spent}, logged income $${stats.income}, saved $${stats.saved}. Total saved toward goal: $${getTotalSaved()}]`;
@@ -1017,26 +977,117 @@ function updateBudgetStrategy() {
   showNotification('Budget strategy updated!');
 }
 
-function renderRecurringItems() {
-  const container = document.getElementById('recurringList');
-  if (recurringItems.length === 0) {
-    container.innerHTML = '<div style="text-align: center; color: var(--muted); font-size: 0.8rem; padding: 20px;">No recurring items yet. Add your first one below!</div>';
+function renderBills() {
+  const container = document.getElementById('billsContent');
+  
+  if (!isSetupComplete) {
+    container.innerHTML = `
+      <div style="text-align: center; color: var(--muted); font-size: 0.9rem; padding: 40px 20px;">
+        <div style="font-size: 2rem; margin-bottom: 16px;">📋</div>
+        Complete your financial setup first!<br>
+        Go to the Chat tab and answer the setup questions to see your personalized bills overview.
+      </div>
+    `;
     return;
   }
 
-  container.innerHTML = recurringItems.map((item, index) => `
-    <div class="recurring-item">
-      <div class="recurring-info">
-        <div class="recurring-name">${item.name}</div>
-        <div class="recurring-meta">${item.frequency} · ${item.category || item.type}</div>
-      </div>
-      <div class="recurring-amount ${item.type}">$${item.amount}</div>
-      <div class="recurring-actions">
-        <button class="recurring-edit" onclick="editRecurringItem(${index})">✏️</button>
-        <button class="recurring-delete" onclick="deleteRecurringItem(${index})">🗑️</button>
-      </div>
-    </div>
-  `).join('');
+  let html = '';
+
+  // Income Sources
+  if (userProfile.income) {
+    html += `<div class="section-label">Income Sources</div>
+    <div class="bills-list">`;
+    
+    // Parse income information
+    const incomeLines = userProfile.income.split('\n');
+    incomeLines.forEach(line => {
+      if (line.trim()) {
+        html += `<div class="bill-row"><span class="bill-name">${line}</span></div>`;
+      }
+    });
+    
+    html += `</div>`;
+  }
+
+  // Housing
+  if (userProfile.housing) {
+    html += `<div class="section-label">Housing</div>
+    <div class="bills-list">
+      <div class="bill-row"><span class="bill-name">${userProfile.housing}</span></div>
+    </div>`;
+  }
+
+  // Transportation
+  if (userProfile.transportation) {
+    html += `<div class="section-label">Transportation</div>
+    <div class="bills-list">`;
+    
+    const transportLines = userProfile.transportation.split('\n');
+    transportLines.forEach(line => {
+      if (line.trim()) {
+        html += `<div class="bill-row"><span class="bill-name">${line}</span></div>`;
+      }
+    });
+    
+    html += `</div>`;
+  }
+
+  // Utilities and Bills
+  if (userProfile.utilities) {
+    html += `<div class="section-label">Utilities & Subscriptions</div>
+    <div class="bills-list">
+      <div class="bill-row"><span class="bill-name">${userProfile.utilities}</span></div>
+    </div>`;
+  }
+
+  // Outstanding Debts
+  if (userProfile.debts) {
+    html += `<div class="section-label">Outstanding Debts</div>`;
+    
+    // Try to parse debts into structured format
+    const debtLines = userProfile.debts.split('\n');
+    debtLines.forEach(line => {
+      if (line.trim() && line.includes('$')) {
+        const amountMatch = line.match(/\$?(\d+(?:,\d+)?(?:\.\d+)?)/);
+        if (amountMatch) {
+          const amount = amountMatch[0];
+          const name = line.replace(amount, '').trim();
+          html += `<div class="debt-row">
+            <div class="debt-name">${name}</div>
+            <div class="debt-bottom">
+              <span class="debt-status">To be determined</span>
+              <span class="debt-amount">${amount}</span>
+            </div>
+          </div>`;
+        }
+      }
+    });
+  }
+
+  // Recurring Items
+  if (recurringItems.length > 0) {
+    html += `<div class="section-label">Recurring Items</div>
+    <div class="bills-list">`;
+    
+    recurringItems.forEach(item => {
+      html += `<div class="bill-row">
+        <span class="bill-name">${item.name} (${item.frequency})</span>
+        <span class="bill-amt" style="color: ${item.type === 'income' ? 'var(--green)' : 'var(--red)'}">$${item.amount}</span>
+      </div>`;
+    });
+    
+    html += `</div>`;
+  }
+
+  if (!html) {
+    html = `<div style="text-align: center; color: var(--muted); font-size: 0.9rem; padding: 40px 20px;">
+      <div style="font-size: 2rem; margin-bottom: 16px;">📊</div>
+      Your financial information will appear here after setup.<br>
+      Use the Settings tab to add recurring bills and expenses.
+    </div>`;
+  }
+
+  container.innerHTML = html;
 }
 
 function showAddRecurringModal(editIndex = null) {
@@ -1225,7 +1276,208 @@ function showNotification(message) {
   }, 3000);
 }
 
+  showNotification('Recurring item deleted!');
+}
+
+// Setup Flow Functions
+function initializeApp() {
+  if (!isSetupComplete) {
+    // Start setup mode
+    showWelcomeMessage();
+    if (setupStep === 0) {
+      // First time - show initial setup message
+      setTimeout(() => {
+        appendMessage('ai', setupQuestions[0]);
+        chatHistory.push({ role: 'assistant', content: setupQuestions[0] });
+      }, 500);
+    } else {
+      // Continuing setup - show current question
+      setTimeout(() => {
+        appendMessage('ai', setupQuestions[setupStep]);
+        chatHistory.push({ role: 'assistant', content: setupQuestions[setupStep] });
+      }, 500);
+    }
+  } else {
+    // Normal mode
+    showWelcomeMessage();
+  }
+}
+
+function showWelcomeMessage() {
+  const welcomeBubble = document.getElementById('welcomeBubble');
+  if (!isSetupComplete) {
+    welcomeBubble.textContent = `Welcome! Let's set up your budget tracker. I'll ask you a few questions to understand your financial situation.`;
+  } else {
+    welcomeBubble.textContent = `Hey! I'm your budget assistant. 👋
+
+I know your financial situation. Just talk to me naturally! You can say things like:
+• "Just spent $40 at Target"
+• "Got paid $500 today" 
+• "Put $100 in savings"
+• "How am I doing this month?"
+
+What's up?`;
+  }
+}
+
+function processSetupResponse(userMessage) {
+  setupResponses[setupStep] = userMessage;
+  
+  // Extract information from response and update userProfile
+  extractSetupInfo(userMessage, setupStep);
+  
+  setupStep++;
+  localStorage.setItem('setupStep', setupStep);
+  
+  if (setupStep < setupQuestions.length) {
+    // Ask next question
+    setTimeout(() => {
+      appendMessage('ai', setupQuestions[setupStep]);
+      chatHistory.push({ role: 'assistant', content: setupQuestions[setupStep] });
+    }, 1000);
+  } else {
+    // Setup complete
+    completeSetup();
+  }
+}
+
+function extractSetupInfo(message, step) {
+  const lowerMessage = message.toLowerCase();
+  
+  switch(step) {
+    case 0: // Income
+      // Extract hours and rate
+      const hourMatch = message.match(/(\d+)\s*hours?\s*(?:per|\/)?\s*week/i);
+      const rateMatch = message.match(/\$?(\d+(?:\.\d+)?)\s*(?:per|\/)?\s*hour/i);
+      
+      if (hourMatch && rateMatch) {
+        const hours = parseInt(hourMatch[1]);
+        const rate = parseFloat(rateMatch[1]);
+        const monthly = Math.round((hours * rate * 52) / 12);
+        userProfile.income = `Primary job: ${hours}hrs/week at $${rate}/hr = ~$${monthly}/mo`;
+      }
+      break;
+      
+    case 1: // Other income
+      if (lowerMessage.includes('depop') || lowerMessage.includes('side') || lowerMessage.includes('gig')) {
+        const amountMatch = message.match(/\$?(\d+(?:\.\d+)?)/g);
+        if (amountMatch) {
+          userProfile.income += `\nAdditional income: ~$${amountMatch[0].replace('$', '')}/mo`;
+        }
+      }
+      break;
+      
+    case 2: // Housing
+      if (lowerMessage.includes('none') || lowerMessage.includes('rent.free') || lowerMessage.includes('live with')) {
+        userProfile.housing = 'Rent-free (lives with family)';
+      } else {
+        const rentMatch = message.match(/\$?(\d+(?:\.\d+)?)/);
+        if (rentMatch) {
+          userProfile.housing = `Rent: $${rentMatch[1]}`;
+        }
+      }
+      break;
+      
+    case 3: // Transportation
+      const carPaymentMatch = message.match(/car payment[^$]*\$?(\d+(?:\.\d+)?)/gi);
+      const insuranceMatch = message.match(/insurance[^$]*\$?(\d+(?:\.\d+)?)/i);
+      const gasMatch = message.match(/gas[^$]*\$?(\d+(?:\.\d+)?)/i);
+      
+      userProfile.transportation = '';
+      if (carPaymentMatch) {
+        carPaymentMatch.forEach(match => {
+          const amount = match.match(/\$?(\d+(?:\.\d+)?)/);
+          if (amount) userProfile.transportation += `Car payment: $${amount[1]}\n`;
+        });
+      }
+      if (insuranceMatch) {
+        const amount = insuranceMatch[1];
+        userProfile.transportation += `Insurance: $${amount}\n`;
+      }
+      if (gasMatch) {
+        const amount = gasMatch[1];
+        userProfile.transportation += `Gas: ~$${amount}/mo\n`;
+      }
+      break;
+      
+    case 4: // Utilities and subscriptions
+      // This will be complex - extract various bills
+      userProfile.utilities = message;
+      break;
+      
+    case 5: // Debts
+      userProfile.debts = message;
+      break;
+      
+    case 6: // Savings goal
+      const goalMatch = message.match(/\$?(\d+(?:,\d+)?(?:\.\d+)?)/);
+      if (goalMatch) {
+        savingsGoal = parseInt(goalMatch[1].replace(',', ''));
+        localStorage.setItem('savingsGoal', savingsGoal);
+      }
+      break;
+      
+    case 7: // Other context
+      userProfile.otherContext = message;
+      break;
+  }
+  
+  localStorage.setItem('userProfile', JSON.stringify(userProfile));
+}
+
+function completeSetup() {
+  isSetupComplete = true;
+  localStorage.setItem('setupComplete', 'true');
+  
+  // Generate summary
+  const summary = generateFinancialSummary();
+  
+  setTimeout(() => {
+    appendMessage('ai', `Perfect! I've got everything I need. Here's your complete financial overview:
+
+${summary}
+
+You can now start tracking expenses! Just tell me about purchases, income, or savings anytime. I can also help you manage recurring bills and track your progress toward your $${savingsGoal} goal.
+
+What would you like to do first?`);
+    chatHistory.push({ role: 'assistant', content: `Setup complete! Here's your financial summary...` });
+  }, 1000);
+  
+  // Update UI
+  updateGoalBar();
+  showWelcomeMessage();
+}
+
+function generateFinancialSummary() {
+  let summary = '';
+  
+  if (userProfile.income) {
+    summary += `💰 INCOME\n${userProfile.income}\n\n`;
+  }
+  
+  if (userProfile.housing) {
+    summary += `🏠 HOUSING\n${userProfile.housing}\n\n`;
+  }
+  
+  if (userProfile.transportation) {
+    summary += `🚗 TRANSPORTATION\n${userProfile.transportation}\n`;
+  }
+  
+  if (userProfile.utilities) {
+    summary += `📄 BILLS & SUBSCRIPTIONS\n${userProfile.utilities}\n\n`;
+  }
+  
+  if (userProfile.debts) {
+    summary += `💳 DEBTS\n${userProfile.debts}\n\n`;
+  }
+  
+  summary += `🎯 SAVINGS GOAL: $${savingsGoal} by December 2025`;
+  
+  return summary;
+}
+
 // Init
+initializeApp();
 updateGoalBar();
 renderLedger();
 renderRecurringItems();
