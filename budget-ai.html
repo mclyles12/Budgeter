@@ -567,18 +567,14 @@
 <div class="header">
   <div class="header-top">
     <h1>💰 My Budget AI</h1>
-    <div class="header-badges">
-      <span class="badge green" id="snapBadge">SNAP Pending</span>
-      <span class="badge gold">Dec Goal</span>
-    </div>
   </div>
 </div>
 
 <!-- GOAL BAR -->
 <div class="goal-bar">
   <div class="goal-row">
-    <span class="goal-label" id="goalLabel">Saved toward $0</span>
-    <span class="goal-amount" id="goalDisplay">$0 / $6,000</span>
+    <span class="goal-label" id="goalLabel">No savings goal set</span>
+    <span class="goal-amount" id="goalDisplay">$0 / --</span>
   </div>
   <div class="progress-track">
     <div class="progress-fill" id="progressFill" style="width:0%"></div>
@@ -633,8 +629,7 @@
         <div class="goal-title">Savings Goal</div>
         <div class="goal-input-group">
           <span class="goal-prefix">$</span>
-          <input type="number" id="savingsGoal" placeholder="6000" class="goal-input" value="6000">
-          <span class="goal-suffix">by Dec 2025</span>
+          <input type="number" id="savingsGoal" placeholder="Enter goal amount" class="goal-input" value="">
         </div>
         <button class="goal-btn" onclick="updateSavingsGoal()">Update Goal</button>
       </div>
@@ -731,7 +726,7 @@ let chatHistory = [];
 let isLoading = false;
 let recurringItems = JSON.parse(localStorage.getItem('budgetRecurring') || '[]');
 let budgetStrategy = localStorage.getItem('budgetStrategy') || 'budget';
-let savingsGoal = parseInt(localStorage.getItem('savingsGoal')) || 6000;
+let savingsGoal = localStorage.getItem('savingsGoal') ? parseInt(localStorage.getItem('savingsGoal')) : null;
 let isListening = false;
 let recognition = null;
 
@@ -776,10 +771,21 @@ function getTotalSaved() {
 
 function updateGoalBar() {
   const saved = getTotalSaved();
+  const goalLabel = document.getElementById('goalLabel');
+  const goalDisplay = document.getElementById('goalDisplay');
+  const progressFill = document.getElementById('progressFill');
+
+  if (!savingsGoal) {
+    goalLabel.textContent = 'No savings goal set';
+    goalDisplay.textContent = `$${fmt(saved)} / --`;
+    progressFill.style.width = '0%';
+    return;
+  }
+
   const pct = Math.min(100, (saved / savingsGoal) * 100);
-  document.getElementById('goalDisplay').textContent = `${fmt(saved)} / $${savingsGoal}`;
-  document.getElementById('goalLabel').textContent = `Saved toward $${savingsGoal}`;
-  document.getElementById('progressFill').style.width = pct + '%';
+  goalDisplay.textContent = `${fmt(saved)} / $${savingsGoal}`;
+  goalLabel.textContent = `Saved toward $${savingsGoal}`;
+  progressFill.style.width = pct + '%';
 }
 
 function addTransaction(tx) {
@@ -1347,7 +1353,7 @@ function generateFinancialSummary() {
 
 function updateSettingsUI() {
   const goalInput = document.getElementById('savingsGoal');
-  if (goalInput) goalInput.value = savingsGoal;
+  if (goalInput) goalInput.value = savingsGoal || '';
 
   const budgetOption = document.getElementById('strategy-budget');
   const savingsOption = document.getElementById('strategy-savings');
@@ -1404,10 +1410,11 @@ What's up?`;
 
 function processSetupResponse(userMessage) {
   setupResponses[setupStep] = userMessage;
-  
+  chatHistory.push({ role: 'user', content: userMessage });
+
   // Extract information from response and update userProfile
   extractSetupInfo(userMessage, setupStep);
-  
+
   setupStep++;
   localStorage.setItem('setupStep', setupStep);
   
