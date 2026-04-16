@@ -52,9 +52,17 @@ export default async function handler(req, res) {
     });
 
     if (!response.ok) {
-      console.error('Anthropic API error:', response.status, response.statusText);
-      return res.status(500).json({
-        error: 'AI service temporarily unavailable'
+      const text = await response.text();
+      console.error('Anthropic API error:', response.status, response.statusText, text);
+      let parsed = null;
+      try {
+        parsed = JSON.parse(text);
+      } catch (e) {
+        parsed = { error: text };
+      }
+      return res.status(response.status).json({
+        error: 'AI service temporarily unavailable',
+        details: parsed
       });
     }
 
