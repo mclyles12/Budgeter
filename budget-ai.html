@@ -560,7 +560,6 @@
     to { transform: translateX(100%); opacity: 0; }
   }
 </style>
-</style>
 </head>
 <body>
 
@@ -578,7 +577,7 @@
 <!-- GOAL BAR -->
 <div class="goal-bar">
   <div class="goal-row">
-    <span class="goal-label" id="goalLabel">Saved toward $${savingsGoal}</span>
+    <span class="goal-label" id="goalLabel">Saved toward $0</span>
     <span class="goal-amount" id="goalDisplay">$0 / $6,000</span>
   </div>
   <div class="progress-track">
@@ -634,7 +633,7 @@
         <div class="goal-title">Savings Goal</div>
         <div class="goal-input-group">
           <span class="goal-prefix">$</span>
-          <input type="number" id="savingsGoal" placeholder="6000" class="goal-input" value="${savingsGoal}">
+          <input type="number" id="savingsGoal" placeholder="6000" class="goal-input" value="6000">
           <span class="goal-suffix">by Dec 2025</span>
         </div>
         <button class="goal-btn" onclick="updateSavingsGoal()">Update Goal</button>
@@ -650,11 +649,11 @@
     <div class="section-label">📊 Budget Strategy</div>
     <div class="strategy-card">
       <div class="strategy-option">
-        <input type="radio" id="strategy-budget" name="budgetStrategy" value="budget" ${budgetStrategy === 'budget' ? 'checked' : ''}>
+        <input type="radio" id="strategy-budget" name="budgetStrategy" value="budget">
         <label for="strategy-budget">Stick to monthly budget</label>
       </div>
       <div class="strategy-option">
-        <input type="radio" id="strategy-savings" name="budgetStrategy" value="savings" ${budgetStrategy === 'savings' ? 'checked' : ''}>
+        <input type="radio" id="strategy-savings" name="budgetStrategy" value="savings">
         <label for="strategy-savings">Focus on savings goal</label>
       </div>
       <button class="goal-btn" onclick="updateBudgetStrategy()">Update Strategy</button>
@@ -956,7 +955,7 @@ async function sendMessage() {
     });
 
     const data = await response.json();
-    const fullText = data.content?.[0]?.text || "Sorry, I couldn't process that.";
+    const fullText = data.completion || data.content?.[0]?.text || data.message?.content?.[0]?.text || data.output?.[0]?.content?.[0]?.text || data.text || "Sorry, I couldn't process that.";
 
     removeTyping();
     appendMessage('ai', fullText);
@@ -997,7 +996,7 @@ function updateSavingsGoal() {
     savingsGoal = newGoal;
     localStorage.setItem('savingsGoal', savingsGoal);
     updateGoalBar();
-    input.value = '';
+    input.value = savingsGoal;
     showNotification('Savings goal updated!');
   }
 }
@@ -1308,7 +1307,52 @@ function showNotification(message) {
   }, 3000);
 }
 
-  showNotification('Recurring item deleted!');
+function renderRecurringItems() {
+  const container = document.getElementById('recurringList');
+  if (!container) return;
+  if (recurringItems.length === 0) {
+    container.innerHTML = '<div class="empty-ledger">No recurring items yet. Add one to track monthly bills and income.</div>';
+    return;
+  }
+
+  container.innerHTML = recurringItems.map((item, index) => `
+    <div class="recurring-item">
+      <div class="recurring-info">
+        <div class="recurring-name">${item.name}</div>
+        <div class="recurring-meta">${item.frequency} · ${item.category || item.type}</div>
+      </div>
+      <div class="recurring-amount ${item.type === 'income' ? 'income' : 'expense'}">$${item.amount}</div>
+      <div class="recurring-actions">
+        <button class="recurring-edit" onclick="editRecurringItem(${index})">Edit</button>
+        <button class="recurring-delete" onclick="deleteRecurringItem(${index})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function generateFinancialSummary() {
+  const summary = [];
+  if (userProfile.income) summary.push(`Income: ${userProfile.income}`);
+  if (userProfile.housing) summary.push(`Housing: ${userProfile.housing}`);
+  if (userProfile.transportation) summary.push(`Transportation: ${userProfile.transportation}`);
+  if (userProfile.utilities) summary.push(`Utilities: ${userProfile.utilities}`);
+  if (userProfile.debts) summary.push(`Debts: ${userProfile.debts}`);
+  summary.push(`Savings goal: $${savingsGoal}`);
+  if (userProfile.otherContext) summary.push(`Other notes: ${userProfile.otherContext}`);
+  if (recurringItems.length) {
+    summary.push(`Recurring items: ${recurringItems.length} added`);
+  }
+  return summary.length ? summary.join('\n') : 'No setup data captured yet.';
+}
+
+function updateSettingsUI() {
+  const goalInput = document.getElementById('savingsGoal');
+  if (goalInput) goalInput.value = savingsGoal;
+
+  const budgetOption = document.getElementById('strategy-budget');
+  const savingsOption = document.getElementById('strategy-savings');
+  if (budgetOption) budgetOption.checked = budgetStrategy === 'budget';
+  if (savingsOption) savingsOption.checked = budgetStrategy === 'savings';
 }
 
 // Setup Flow Functions
@@ -1520,6 +1564,7 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('DOM loaded, initializing app...');
   initializeApp();
   updateGoalBar();
+  updateSettingsUI();
   renderLedger();
   renderRecurringItems();
 });

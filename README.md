@@ -35,9 +35,14 @@ A comprehensive personal budget tracking web app with AI-powered chat assistant,
 ## 🚀 Setup & Deployment
 
 ### Local Development
-1. Open `budget-ai.html` in a modern web browser (Chrome/Edge recommended for speech features)
-2. **First-time setup**: The AI will guide you through an interactive setup process
-3. Start chatting with your personalized AI budget assistant!
+1. Serve the repository from a local web server instead of opening the file directly.
+   - Example: `cd Budgeter && python3 -m http.server 8000`
+   - Then open `http://localhost:8000/budget-ai.html`
+2. If you want the AI chat endpoint to work locally, run Vercel Dev in the repo root:
+   - `vercel dev`
+   - This will serve both `budget-ai.html` and `api/chat.js` on `http://localhost:3000`
+3. **First-time setup**: The AI will guide you through an interactive setup process
+4. Start chatting with your personalized AI budget assistant!
 
 ### Vercel Deployment (Recommended)
 1. **Fork/Clone this repository** to your GitHub account
