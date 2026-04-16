@@ -2,37 +2,37 @@
 
 A comprehensive personal budget tracking web app with AI-powered chat assistant, featuring advanced financial management tools.
 
-## ✨ Features
+## Features
 
-### 🤖 AI Chat Assistant
+### AI Chat Assistant
 - Natural language interface for logging expenses, income, and savings
 - Intelligent financial advice based on your complete financial situation
 - Dynamic responses based on your chosen budget strategy
 
-### 📊 Financial Tracking
+### Financial Tracking
 - **Transaction Ledger**: View and manage all financial transactions by month
 - **Bills Overview**: Track fixed monthly bills, outstanding debts, and income sources
 - **Savings Goal Tracking**: Customizable progress bar toward your savings goal
 - **Recurring Items Management**: Add, edit, and remove recurring expenses/income
 
-### 🎯 Financial Goals & Strategy
+### Financial Goals & Strategy
 - **Custom Savings Goals**: Set your own savings target and timeline
 - **Budget Strategy Selection**: Choose between "stick to budget" or "focus on savings goal"
 - **Dynamic AI Responses**: AI adapts its advice based on your selected strategy
 
-### 📷 Image Upload
+### Image Upload
 - Upload receipt photos or expense images
 - Visual expense tracking (image display in chat)
 
-### 🎤 Speech-to-Text
+### Speech-to-Text
 - Voice input for hands-free expense logging
 - Browser-based speech recognition (Chrome/Edge recommended)
 
-### 💾 Local Storage
+###  Local Storage
 - All data stored locally in your browser
 - No account required, works offline
 
-## 🚀 Setup & Deployment
+## Setup & Deployment
 
 ### Local Development
 1. Serve the repository from a local web server instead of opening the file directly.
@@ -60,14 +60,14 @@ A comprehensive personal budget tracking web app with AI-powered chat assistant,
 ### Manual API Key Setup (Not Recommended for Production)
 If running locally without Vercel, you'll need to add your Anthropic API key directly to the serverless function. However, this exposes your key in the codebase - use Vercel environment variables instead.
 
-## 🔒 Security
+## Security
 
 - **API Key Protection**: Anthropic API key is stored securely in Vercel environment variables, never exposed in client-side code
 - **Serverless Functions**: All AI API calls are proxied through Vercel's serverless functions
 - **No Client-Side Secrets**: Sensitive credentials are never sent to the browser
 - **HTTPS Only**: Vercel automatically provides SSL certificates for secure connections
 
-## 📱 Usage
+## Usage
 
 ### Initial Setup
 When you first open the app, the AI will walk you through a comprehensive financial assessment, similar to a conversation with a financial advisor. Answer the questions honestly to get personalized advice.
@@ -85,7 +85,7 @@ When you first open the app, the AI will walk you through a comprehensive financ
 - "Put one hundred dollars in savings"
 - "How am I doing this month?"
 
-## 🔧 Technical Details
+## Technical Details
 
 - **AI Model**: Claude 3.5 Sonnet via Anthropic API
 - **Storage**: Browser localStorage (no server required)
@@ -93,13 +93,13 @@ When you first open the app, the AI will walk you through a comprehensive financ
 - **Image Handling**: Client-side base64 encoding
 - **Responsive Design**: Works on desktop and mobile
 
-## 🔒 Privacy & Security
+## Privacy & Security
 
 - All data stored locally in your browser
 - No data sent to external servers (except Anthropic API for chat)
 - API key stored in browser (consider security implications for production use)
 
-## 🎯 Budget Strategies
+## Budget Strategies
 
 ### Stick to Monthly Budget
 - Focuses on maintaining spending within income limits
@@ -111,7 +111,7 @@ When you first open the app, the AI will walk you through a comprehensive financ
 - Calculates required monthly savings
 - Warns about expenses that impact your goal
 
-## 📋 Recurring Items
+## Recurring Items
 
 Manage all your regular financial commitments:
 - **Expenses**: Rent, utilities, subscriptions, loan payments
